@@ -19,14 +19,53 @@ We can test differnt SQL methods by using "Client Statistics" and also "Actual E
 Do not forget to clear the caches before each test using :
 
 CHECKPOINT;
-
 GO
-
 DBCC DROPCLEANBUFFERS; 
-
 GO
-
 DBCC FREEPROCCACHE; 
-
 GO
+
+IMHO it is much easier to follow a series of JOINS than a series of sub-queries - the JOINS are self documenting
+Compare the following:
+
+
+----- subquery vs. join testing
+
+---subquery
+
+select
+
+Id,
+
+Name,
+
+[Description]
+
+from
+
+tblProducts
+
+where Not Exists(select * from tblProductSales where ProductId = tblProducts.Id);
+
+
+---Join
+
+Select
+
+tblProducts.Id,
+
+Name,
+
+[Description] 
+
+from
+
+tblProducts
+
+left join tblProductSales
+
+on tblProducts.Id = tblProductSales.ProductId
+
+where tblProductSales.ProductId IS NULL;
+
 
