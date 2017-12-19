@@ -17,9 +17,16 @@ If the same execution plan is generated for the sub query as that for the join t
 
 We can test differnt SQL methods by using "Client Statistics" and also "Actual Execution Plan" options while running the queries side by side.
 Do not forget to clear the caches before each test using :
+
 CHECKPOINT;
+
 GO
-DBCC DROPCLEANBUFFERS; ---Clears query cache
+
+DBCC DROPCLEANBUFFERS; 
+
 GO
-DBCC FREEPROCCACHE; ---Clears execution plan cache
+
+DBCC FREEPROCCACHE; 
+
 GO
+
