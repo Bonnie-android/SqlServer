@@ -1,6 +1,7 @@
 ---- Optional Parameters in SQl Server Stored Procedures
 ---- Parameters of a SQL Server stored procedure can be made optional by specifying default values
 ---- In this case if we don't specify any parameters we receive all records
+---- Also please see asp.net application which calls this stored proc called 'OptionalParametersInStoredProcedures'
 Alter Proc spSearchEmployees
 @Name varchar(50) = NULL,
 @Title varchar(20) = NULL,
