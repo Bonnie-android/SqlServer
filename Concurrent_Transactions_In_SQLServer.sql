@@ -39,7 +39,7 @@ What are the isolation levels provided by SQL Server to address concurrency side
  
  /********************************************************************
  For dirty reads we need to set the transaction isolation level to Read Uncommitted
-In this way data that has not been committed yet can be read
+In this way data that has not been committed can be read
 
 Set Transaction Isolation Level Read Uncommitted
 Select * from tblInventory where ID = 1
