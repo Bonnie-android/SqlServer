@@ -8,7 +8,7 @@ Alter Proc spSearchEmployees
 @Salary money = NULL
 as
 BEGIN
-   SELECT [ID]
+   SELECT [ID] //Identity column
       ,[Name]
       ,[Title]
       ,[Salary]
