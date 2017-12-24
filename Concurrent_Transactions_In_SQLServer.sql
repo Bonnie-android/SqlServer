@@ -36,6 +36,18 @@ What are the isolation levels provided by SQL Server to address concurrency side
   END CATCH
 
  select * from tblAccounts;
+ 
+ /********************************************************************
+ For dirty reads we need to set the transaction isolation level to Read Uncommitted
+In this way data that has not been committed yet can be read
+
+Set Transaction Isolation Level Read Uncommitted
+Select * from tblInventory where ID = 1
+
+Another way to access uncommitted data in a table is to use the NOLOCK table hint.
+This has the same results as Read Uncommitted
+Select * fro tblInventory (NOLOCK) where ID = 1
+*************************************************************************/
 
 
    
