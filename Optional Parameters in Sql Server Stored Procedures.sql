@@ -22,3 +22,15 @@ spSearchEmployees @Name ='Mary-Lee Scott' --- returns a single record
 spSearchEmployees @Title= 'Manager' --- returns list of all managers
 
 
+
+/**-------- Model table -------------------
+create table  [dbo].[Employees]
+(
+  ID int primary key identity,
+  Name varchar(20),
+  Title varchar(20),
+  Salary money
+)
+
+-------------------------------**/
+
