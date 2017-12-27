@@ -1,0 +1,43 @@
+Deadlocks
+What is a dead lock?
+Process 1 has locked A and needs to move to B next. 
+Process 2 has blocked B and needs to move to A next. 
+Process 1 can’t unlock A until it has access to B. 
+Process 2 can’t unlock B until it has access to A. 
+Both are waiting for the lock to be released.
+
+
+-----Locks------>TableA<----waits-----
+|                                    |
+|                                    |
+|                                    |
+Process A                       Process B
+|                                    |
+|                                    |
+|                                    |
+----waits------->TableB<----locks-----
+
+When a deadlock occurs SQL Server will choose one of the processes as the deadlock victim and rollback the process, so that the other process can move forward.
+
+How does SQL Server detect deadlocks?
+A lock monitor thread runs every five seconds to detect if there are any deadlocks. If the lock monitor thread finds a deadlock, the deadlock detection interval will drop from five seconds to as low as 100 milliseconds depending on the frequency of deadlocks.
+If the lock monitor thread stops finding deadlocks, the Database Engine increases the intervals between searches back to five seconds.
+
+What happens when a deadlock is detected?
+When a deadlock is detected, the Database Engine ends the deadlock by choosing one of the processes as the Deadlock Victim.
+The deadlock victim's transaction is ended and rolled back and all locks are released for that transaction.
+The system returns a 1205 error to the application with a message. The other transactions may now move forward.
+
+How does Sql Server determine the priority of transactions?
+By default SQL Server chooses a transaction as the deadlock victim that is least expensive to rollback.
+However, a user can specify the priority of the sessions in a deadlock by using the SET DEADLOCK_PRIORITY statement.
+The session with the lowest deadlock priority is chosen as the deadlock victim.
+DEADLOCK_PRIORITY can have the values LOW, NORMAL and HIGH. NORMAL is the default.
+DEADLOCK_PRIORITY can also be set using an integer value ranging from -10 to 10. NORMAL would be 0.
+LOW would be a value less than 0 and HIGH would be a value greater than 0.
+
+Example- SET DEADLOCK_PRIORITY NORMAL
+
+If the transactions causing the deadlock have different deadlock priorities then the one having the lowest priority will be chosen as the deadlock victim.
+If the transactions causing the deadlock have the same priority then the transaction having the least expensive rollback is selected as the victim.
+If the transactions causing the deadlock have the same priority and same cost then the deadlock victim is chosen randomly.
