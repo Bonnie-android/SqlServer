@@ -25,7 +25,7 @@ GO
 DBCC FREEPROCCACHE; 
 GO
 
-IMHO it is much easier to follow a series of JOINS than a series of sub-queries - the JOINS are self documenting
+It is much easier to follow a series of JOINS than a series of sub-queries - the JOINS are self documenting
 Compare the following:
 
 
