@@ -48,7 +48,7 @@ tblProducts
 where Not Exists(select * from tblProductSales where ProductId = tblProducts.Id);
 
 
----Join
+-----compare this to the JOIN which is much easier to read
 
 Select
 
