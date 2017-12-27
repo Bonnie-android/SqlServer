@@ -43,6 +43,7 @@ Begin Tran
 
 If the transactions causing the deadlock have different deadlock priorities then the one having the lowest priority will be chosen as the deadlock victim.
 If the transactions causing the deadlock have the same priority then the transaction having the least expensive rollback is selected as the victim.
+   This would mean the process that is used the least log space i.e. 'Log Used' in the transaction log.
 If the transactions causing the deadlock have the same priority and same cost then the deadlock victim is chosen randomly.
 
 Deadlock information can be written to a log.
@@ -67,6 +68,12 @@ loginname - the login name associated with the process
 isolationlevel - what isolation level was used
 procname - the stored procedure name
 inputbuf - the code the process is executing when the deadlock occured
-the owner id specifies the process that has the lock on the specified process
+owner-list - contains the owner id of the process and the lock mode it has on the resource.
+lock mode determines how the resource can be acccessed by concurrent transactions. S for shared lock, U for Update lock, X for Exclusive lock
+waiter-list - contains waiter id of the process that is waiting on the lock and the lock mode it is requesting.
+
+Using Sql profiler to capture deadlock graph
+To capture a graph of a deadlock event add Deadlock graph event to the trace in SQL Profiler
+The deadlock graph data is captured in XML format which can be extracted to a physical file.
 
 
