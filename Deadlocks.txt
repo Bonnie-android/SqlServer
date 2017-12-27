@@ -7,7 +7,7 @@ Process 2 can’t unlock B until it has access to A.
 Both are waiting for the lock to be released.
 
 
------Locks------>TableA<----waits-----
+-----locks------>TableA<----waits-----
 |                                    |
 |                                    |
 |                                    |
@@ -36,8 +36,37 @@ DEADLOCK_PRIORITY can have the values LOW, NORMAL and HIGH. NORMAL is the defaul
 DEADLOCK_PRIORITY can also be set using an integer value ranging from -10 to 10. NORMAL would be 0.
 LOW would be a value less than 0 and HIGH would be a value greater than 0.
 
-Example- SET DEADLOCK_PRIORITY NORMAL
+Example- 
+SET DEADLOCK_PRIORITY NORMAL
+Begin Tran
+.....
 
 If the transactions causing the deadlock have different deadlock priorities then the one having the lowest priority will be chosen as the deadlock victim.
 If the transactions causing the deadlock have the same priority then the transaction having the least expensive rollback is selected as the victim.
 If the transactions causing the deadlock have the same priority and same cost then the deadlock victim is chosen randomly.
+
+Deadlock information can be written to a log.
+There are several ways to track down the queries that are causing deadlocks.
+One option is to use SQL Server trace flag 1222 to output deadlock information to the SQL Server error log.
+Use the following commands to initiate, check the status of and terminate the trace flag
+DBCC Traceon(1222,-1)
+DBCC TraceStatus(1222,-1)
+DBCC Traceoff(1222,-1)
+The parameter -1 indicates that the trace flag must be set at the global level. If the -1 is omitted then the trace flag will be set at the session level.
+
+To access and read the error log:
+execute sp_readerrorlog
+
+What does the error log contain and how can we use the information?
+The error log contains the following information regarding deadlocks
+Deadlock victim - contains the ID of the process that was selected as the deadlock victim and killed by SQL Server.
+Process List - contains the list of processes that participated in the deadlock.
+Resource List - Contains the list of resources(database objects) owned by the processes involved in the deadlock
+The Process List contains the following Nodes and their descriptions -
+loginname - the login name associated with the process
+isolationlevel - what isolation level was used
+procname - the stored procedure name
+inputbuf - the code the process is executing when the deadlock occured
+the owner id specifies the process that has the lock on the specified process
+
+
