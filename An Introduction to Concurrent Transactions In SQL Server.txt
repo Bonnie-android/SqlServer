@@ -30,6 +30,26 @@ It is also possible to read uncommitted data by using the NOLOCK table hint.
 > select * from tblProducts (NOLOCK) where id = 100.
 
 LOST UPDATES
+A lost update transaction occurs when two or more transactions update the same data at the same time. 
+An inventory table may be updated many times as sales occur. 
+There will be many sales transactions occuring simultaneously on the same data.
+A lost update occurs when one of the transactions overwrites the other transaction with the information in its buffer.
+This problem occurs with the transaction isolation levels read uncommitted and read committed only.
+It does not occur with higher transaction isolation levels.
+
+If the transaction isolation level is set to Repeatable Read then Sql Server will choose the transaction requiring the least amount of work to undo and will kill the process.
+The system will give a msg 1205 similar to the following:
+Msg 1205, Level 13, State 51, Line 10
+Transaction (Process ID 56) was deadlocked on lock resources with another process and has been chosen as the deadlock victim. Rerun the transaction.
+In the event of a conflict the transaction won't run.
+
+NON REPEATABLE READ
+A non-repeatable read happens when one transaction reads the same data twice as part of the transaction but another transaction intervenes in between reads and updates the data.
+The two reads from the first transaction will not be the same.
+To prevent this type of problem use transaction isolation level Repeatable Read or higher isolation level.
+For repeatable read there will be additional locks placed on the tables during the first transaction that cause the second transaction to wait until the first transaction has completed.
+
+
 
 
 
