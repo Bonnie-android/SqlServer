@@ -20,6 +20,11 @@ Serializable transaction isolation level is the strictest of all the transaction
 It has an exclusive lock on the tables being updated until the transaction is finished. Other transactions must wait until the transaction completes.
 Because of this the Serializable isolation level is the slowest.
 
+DIRTY READS
+Dirty reads occur when one transaction is allowed to read the uncommitted data from another transaction. 
+If the transaction in progress is rolled back then the information read from the buffer is no longer valid.
+
+
 
 
 
