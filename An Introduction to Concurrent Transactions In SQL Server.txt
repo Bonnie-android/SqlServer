@@ -43,7 +43,7 @@ Msg 1205, Level 13, State 51, Line 10
 Transaction (Process ID 56) was deadlocked on lock resources with another process and has been chosen as the deadlock victim. Rerun the transaction.
 In the event of a conflict the transaction won't run.
 
-NON REPEATABLE READ
+NON REPEATABLE READS
 A non-repeatable read happens when one transaction reads the same data twice as part of the transaction but another transaction intervenes in between reads and updates the data.
 The two reads from the first transaction will not be the same.
 To prevent this type of problem use transaction isolation level Repeatable Read or higher isolation level.
@@ -54,6 +54,13 @@ Phantom reads occur when the number of rows that are read are not the same withi
 Transaction 1 reads data from a table. Transaction 2 then adds or deletes rows from that block and updates the table.
 Transaction 1 does an additional read on that same block of data but now rows have now been added or deleted by transaction 2.
 This can be prevented by using transaction isolation levels Snapshot or Serializable.
+The transaction isolation level Repeatable Read does not prevent inserts/deletes of the block of data and will not prevent a phantom read.
+The transaction isolation level Serializable issues a range lock.
+A range lock occurs when the where clause of a query contains a range. 
+This range of records is locked throughout the transaction until it is complete.
+
+
+
 
 
 
