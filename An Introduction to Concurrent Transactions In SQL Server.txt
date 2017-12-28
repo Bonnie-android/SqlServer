@@ -3,16 +3,22 @@ Concurrent Transactions In SQL Server
 A transaction is a group of commands working together as a single unit of work.
 Transactions are designed to change the data in a database and to always leave the data in a consistent state.
 Either all of the commands execute and the final result committed or all of the changes are rolled back to their original state.
-
 It is common for many transactions to run concurrently and to be accessing the same tables.
 This leads to concurrency problems when two or more transactions attempt to access the same table for an update.
 The common types of concurrency problems are Dirty Reads, Lost Updates, Non-repeatable Reads and Phantom Reads.
-These problems are a function of the Transaction Isolation Level which involves locking of the tables involved in the transaction.
+The isolation level that is chosen for a transaction defines the degree to which one transaction must be isolated from resources or data modifications made by other transactions.
+Depending on the isolation level chosen there will be varying degrees of performance and concurrency problems.
 The Sql Server Transaction Isolation Levels are Read Uncommitted, Read Committed, Repeatable Read, Snapshot and Serializable.
-Read Uncommitted is the fastest since it involves fewer locks on the tables involved in the transaction.
+Read Uncommitted is the fastest since it involves fewer locks on the tables involved in the transaction. 
+Thie level allows many transactions to run at the same time.
 Read Uncommitted is the source of Dirty Reads, Lost Update, Non-repeatable Reads, and Phantom Reads however.
 Read Committed is the default setting for transactions in Sql Server.
 The Read Committed level of transaction isolation will prevent dirty reads but it will not prevent lost updates, non-repeatable reads or phantom reads.
+Repeatable Read transaction isolation level will prevent dirty reads, lost updates, non-repeatable reads but will not prevent phantom reads.
+Snapshot transaction isolation level will prevent all of the concurrency problems by going down and causing a rollback if these problems arise.
+Serializable transaction isolation level is the strictest of all the transaction isolation levels. 
+It has an exclusive lock on the tables being updated until the transaction is finished. Other transactions must wait until the transaction completes.
+Because of this the Serializable isolation level is the slowest.
 
 
 
