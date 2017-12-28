@@ -23,6 +23,13 @@ Because of this the Serializable isolation level is the slowest.
 DIRTY READS
 Dirty reads occur when one transaction is allowed to read the uncommitted data from another transaction. 
 If the transaction in progress is rolled back then the information read from the buffer is no longer valid.
+This occurs with transaction isolation level read uncommitted and this is the only transaction isolation level having this side effect.
+Transactions are very fast when run at this level.
+> set transaction isolation level read uncommitted
+It is also possible to read uncommitted data by using the NOLOCK table hint. 
+> select * from tblProducts (NOLOCK) where id = 100.
+
+LOST UPDATES
 
 
 
