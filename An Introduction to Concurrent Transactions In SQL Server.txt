@@ -64,6 +64,22 @@ The Serialization transaction isolation level uses a range lock making the table
 Snapshot isolation doesn't use locks, instead it maintains versioning in the database Tempdb. Snapshot does not utilize locks so transactions do not have to wait for the resource.
 For this reason it is much faster than Serialization and it provides the same level of data consistency.
 
+Snapshot Isolation Level
+The Snapshot isolation level must be set at the level of the database.
+An Alter Database statement is used - ALTER DATABASE MY_DB SET ALLOW_SNAPSHOT_ISOLATION ON (OR OFF), then set transaction isolation level SNAPSHOT.
+The transaction using the SNAPSHOT will wait to see if other transactions create a new version of the data during the course of it's processing.
+If there is a conflict between two transactions which are both updating the same data and the version of the snapshot becomes invalid the transaction will go down with a message:
+Msg 3960, Level 16, State 2, Line 5
+Snapshot isolation transaction aborted due to update conflict. You cannot use snapshot isolation to access table 'dbo.tblProduct' directly or indirectly in database 'ProductDB' to update, delete, or insert the row that has been modified or deleted by another transaction. Retry the transaction or change the isolation level for the update/delete statement.
+The transaction will not complete and you will be asked to rerun it. This prevents an overwrite of the previous transaction.
+
+Read Committed SnapShot Isolation Level
+There is one more transaction isolation level that can be used for concurrent transactions and that is the read committed snapshot isolation level.
+
+
+
+
+
 
 
 
