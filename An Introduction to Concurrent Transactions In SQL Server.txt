@@ -58,7 +58,11 @@ The transaction isolation level Repeatable Read does not prevent inserts/deletes
 The transaction isolation level Serializable issues a range lock.
 A range lock occurs when the where clause of a query contains a range. 
 This range of records is locked throughout the transaction until it is complete.
-
+The Snapshot transaction isolation level will also prevent phantom reads and all other anomalies discussed here.
+Snapshot uses a different strategy than the Serilization level. 
+The Serialization transaction isolation level uses a range lock making the tables inaccessable to other transactions while it is in progress.
+Snapshot isolation doesn't use locks, instead it maintains versioning in the database Tempdb. Snapshot does not utilize locks so transactions do not have to wait for the resource.
+For this reason it is much faster than Serialization and it provides the same level of data consistency.
 
 
 
