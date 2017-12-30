@@ -75,6 +75,10 @@ The transaction will not complete and you will be asked to rerun it. This preven
 
 Read Committed SnapShot Isolation Level
 There is one more transaction isolation level that can be used for concurrent transactions and that is the read committed snapshot isolation level.
+The read committed snapshot isolation level is not a different isolaton level, it is a different way of implementing the 'read committed' isolation level.
+The read committed isolation level blocks the transaction if it is trying to read data that is currently being updated.
+To set the read committed snapshot isolation level for a transaction alter the database SET READ_COMMITTED_SNAPSHOT ON, then set transaction isolation level Read Committed.
+This isolation level uses row versioning instead of locks so it will not go down but will instead wait for the other transaction to complete, compared to the transaction going down with a Msg 3960.
 
 
 
