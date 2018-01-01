@@ -81,6 +81,25 @@ To set the read committed snapshot isolation level for a transaction alter the d
 This isolation level uses row versioning instead of locks so it will not go down but will instead wait for the other transaction to complete, compared to the transaction going down with a Msg 3960.
 
 
+Snapshot vs. Read Committed Snapshot
+ALTER DATABASE myDB
+SET ALLOW_SNAPSHOT_ISOLATION ON/OFF
+
+ALTER DATABASE myDB
+SET READ_COMITTED_SNAPSHOT ON/OFF
+
+To summarize, transactions running at the read committed snapshot isolation level will not go down with a Msg 3960 in the event of a conflict and transactions running at the snapshot level will.
+Read committed snapshot isolation level doesn't require any changes to the application code and running at snapshot level does.
+Read committed snapshot isolation level can be used with distributed transactions and snapshot level can't.
+Read committed snapshot isolation level provides statement level read consistency and Snapshot isolation level provides transaction level consistency. 
+
+Implenting Retry Logic for Deadlock Exceptions
+
+
+
+
+
+
 
 
 
