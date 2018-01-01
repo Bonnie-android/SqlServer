@@ -115,9 +115,17 @@ Oldest active transaction:
     SID           : 0x010500000000000515000000327ab70ef190cc4a553262a4e9030000
 DBCC execution completed. If DBCC printed error messages, contact your system administrator.
 
+
+The following script provides information on all open transactions:
+
 www.sqlskills.com/blogs/paul/script-open-transactions-with-text-and-plans/
 
 See also 'Script Open Transactions with Text and PLans.txt
+
+This script will identify all the open processes.
+Identify the process that you want to terminate.
+One way to terminate a process is by right clicking on the SERVER property and selecting the Activity Monitor.
+Here you can identify and terminate the process by right clicking on the process and selecting 'Kill Process'.
 
 	SELECT
     [s_tst].[session_id],
