@@ -93,7 +93,7 @@ Read committed snapshot isolation level doesn't require any changes to the appli
 Read committed snapshot isolation level can be used with distributed transactions and snapshot level can't.
 Read committed snapshot isolation level provides statement level read consistency and Snapshot isolation level provides transaction level consistency. 
 
-Implenting Retry Logic for Deadlock Exceptions
+
 
 
 
