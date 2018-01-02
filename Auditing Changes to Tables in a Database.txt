@@ -31,3 +31,35 @@ This will return an XML file similar to the following for a DROP_TABLE EVENT
     <CommandText>DROP TABLE TEST_EVENT</CommandText>
   </TSQLCommand>
 </EVENT_INSTANCE>
+
+This event instance can be loaded into an Audit table using the trigger.
+Example Audit Table 
+create table tblAuditChanges
+(
+   DatabaseName varchar(250),
+   TableName varchar(250),
+   EventType varchar(250),
+   LoginName varchar(250),
+   SQLCommand varchar(2500),
+   AuditDateTime datetime
+);
+
+How is the data extracted from the XML file and loaded into the Audit table?
+ALTER TRIGGER tr_Audit
+ON ALL SERVER
+FOR CREATE_TABLE, ALTER_TABLE, DROP_TABLE
+AS
+BEGIN
+   DECLARE @EventData XML
+   SELECT @EventData = EVENTDATA()
+   INSERT INTO [ProductDB].[dbo].[tblAuditChanges]
+   (DatabaseName,TableName,EventType,LoginName,SQLCommand,AuditDateTime)
+   VALUES
+   (@EventData.value('(/EVENT_INSTANCE/DatabaseName)[1]','varchar(250)'),
+    @EventData.value('(/EVENT_INSTANCE/ObjectName)[1]'  ,'varchar(250)'),
+	@EventData.value('(/EVENT_INSTANCE/EventType)[1]'   ,'varchar(250)'),
+	@EventData.value('(/EVENT_INSTANCE/LoginName)[1]'   ,'varchar(250)'),
+	@EventData.value('(/EVENT_INSTANCE/TSQLCommand)[1]' ,'varchar(2500)'),
+	GetDate()
+	)  
+END
