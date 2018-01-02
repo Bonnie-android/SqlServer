@@ -3,7 +3,7 @@ An introduction to TRIGGERS in SQL Server
 There are four main types of triggers these being DML triggers, DDL triggers, CLR(common runtime language) triggers and Logon triggers.
 Data Definition Language (DDL) triggers fire in response to DDL events such as CREATE, ALTER and DROP (Table,View,Index,stored procedures.
 
-DDL Events- <a href="https://msdn.microsoft.com/en-us/library/bb522542.aspx">https://msdn.microsoft.com/en-us/library/bb522542.aspx</a>
+DDL Events- https://msdn.microsoft.com/en-us/library/bb522542.aspx
 
 DDL Triggers- https://docs.microsoft.com/en-us/sql/relational-databases/triggers/ddl-triggers#types-of-ddl-triggers
 
