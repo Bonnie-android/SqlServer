@@ -1,0 +1,33 @@
+Auditing Changes to Tables in a Database
+
+Auditing changes to tables in a database can be done using a DDL trigger.
+The EVENTDATA() function returns the event object in XML format.
+The event object contains the event type for example CREATE_TABLE, the post time which is a timestamp of the event the server name, the login name, the database name, the object name that the event occured on and the T-SQL command issuing the event.
+This can be evaluated and loaded into an audit table to keep track of events occuring on the server or in a database.
+This allows us to keep track of all table changes that are happening across all databases in a SQL Server instance.
+We can capture this information using the following trigger
+CREATE TRIGGER tr_Audit
+ON ALL SERVER
+FOR CREATE_TABLE, ALTER_TABLE, DROP_TABLE
+AS
+BEGIN
+   Select EventData()
+END
+
+This will return an XML file similar to the following for a DROP_TABLE EVENT
+<EVENT_INSTANCE>
+  <EventType>DROP_TABLE</EventType>
+  <PostTime>2018-01-02T11:06:16.347</PostTime>
+  <SPID>52</SPID>
+  <ServerName>LAPTOP-QKVFQ59K\SQLEXPRESS</ServerName>
+  <LoginName>LAPTOP-QKVFQ59K\bonnie</LoginName>
+  <UserName>dbo</UserName>
+  <DatabaseName>ProductDB</DatabaseName>
+  <SchemaName>dbo</SchemaName>
+  <ObjectName>TEST_EVENT</ObjectName>
+  <ObjectType>TABLE</ObjectType>
+  <TSQLCommand>
+    <SetOptions ANSI_NULLS="ON" ANSI_NULL_DEFAULT="ON" ANSI_PADDING="ON" QUOTED_IDENTIFIER="ON" ENCRYPTED="FALSE" />
+    <CommandText>DROP TABLE TEST_EVENT</CommandText>
+  </TSQLCommand>
+</EVENT_INSTANCE>
