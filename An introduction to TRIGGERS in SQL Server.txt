@@ -33,6 +33,9 @@ To disable the Server Scope trigger use the following:
 DISABLE TRIGGER tr_ServerScopeTrigger ON ALL SERVER
 To enable
 ENABLE TRIGGER tr_ServerScopeTrigger ON ALL SERVER
+To remove it completely
+DROP TRIGGER tr_ServerScopeTrigger ON ALL SERVER
+
 
 
 
