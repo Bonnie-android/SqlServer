@@ -19,7 +19,7 @@ BEGIN
 END
 
 
-----Server scoped trigger
+----Server scoped trigger must be at level ALL SERVER. This trigger will be found under the server in the 'Triggers' folder
 CREATE TRIGGER tr_ServerScopeTrigger
 ON ALL SERVER
 FOR CREATE_TABLE, ALTER_TABLE, DROP_TABLE
@@ -28,6 +28,11 @@ BEGIN
    ROLLBACK
    Print 'You can not create, alter or drop a table in any database on the server'
 END
+
+To disable the Server Scope trigger use the following:
+DISABLE TRIGGER tr_ServerScopeTrigger ON ALL SERVER
+To enable
+ENABLE TRIGGER tr_ServerScopeTrigger ON ALL SERVER
 
 
 
