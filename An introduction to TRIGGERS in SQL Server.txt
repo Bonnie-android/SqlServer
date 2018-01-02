@@ -7,6 +7,30 @@ DDL Events- https://msdn.microsoft.com/en-us/library/bb522542.aspx
 
 DDL Triggers- https://docs.microsoft.com/en-us/sql/relational-databases/triggers/ddl-triggers#types-of-ddl-triggers
 
+Server Scoped DDL Triggers
+----Database scoped trigger will be located in the 'Database Triggers' folder under 'Programmability' of the database
+CREATE TRIGGERE tr_DatabaseScopeTrigger
+ON DATABASE
+FOR CREATE_TABLE, ALTER_TABLE, DROP_TABLE
+AS
+BEGIN
+   ROLLBACK
+   Print 'You can not create, alter or drop a table in the current database'
+END
+
+
+----Server scoped trigger
+CREATE TRIGGER tr_ServerScopeTrigger
+ON ALL SERVER
+FOR CREATE_TABLE, ALTER_TABLE, DROP_TABLE
+AS
+BEGIN
+   ROLLBACK
+   Print 'You can not create, alter or drop a table in any database on the server'
+END
+
+
+
 
 
 
