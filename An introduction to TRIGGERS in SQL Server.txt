@@ -36,8 +36,26 @@ ENABLE TRIGGER tr_ServerScopeTrigger ON ALL SERVER
 To remove it completely
 DROP TRIGGER tr_ServerScopeTrigger ON ALL SERVER
 
+EXECUTION ORDER OF TRIGGERS
 
+Can an execution order be set for triggers? Yes
+How do we set an execution order for triggers?
 
+Server scope triggers will fire before database scope triggers.
+Using the sp_settriggerorder stored procedure we can set the execution order of server scoped or database scoped triggers.
+
+EXEC sp_settriggerorder
+@triggername = 'tr_DatabaseScopeTrigger1',
+@order='none',
+@stmttype = 'CREATE_TABLE',
+@namespace= 'DATABASE'
+GO
+
+Where
+@triggername is the name of the triger, @order is the order, @stmttype is the type of statment in the trigger such as INSERT, DELETE, UPDATE or DDL event, @namespace is the scope of the trigger. 
+@namespace can have the values DATABASE, SERVER or NULL
+
+ 
 
 
 
