@@ -43,18 +43,31 @@ How do we set an execution order for triggers?
 
 Server scope triggers will fire before database scope triggers.
 Using the sp_settriggerorder stored procedure we can set the execution order of server scoped or database scoped triggers.
+By default triggers will fire in the order in which they are created.
 
 EXEC sp_settriggerorder
 @triggername = 'tr_DatabaseScopeTrigger1',
 @order='none',
-@stmttype = 'CREATE_TABLE',
+@stmttype = 'CREATE_TABLE',---on what stmt in the trigger is this order to occur
 @namespace= 'DATABASE'
 GO
 
 Where
-@triggername is the name of the triger, @order is the order, @stmttype is the type of statment in the trigger such as INSERT, DELETE, UPDATE or DDL event, @namespace is the scope of the trigger. 
-@namespace can have the values DATABASE, SERVER or NULL
+@triggername is the name of the triger, @order is the order to execute, @stmttype is the type of statment in the trigger such as INSERT, DELETE, UPDATE or DDL event, @namespace is the scope of the trigger. 
+@namespace can have the values DATABASE, SERVER or NULL.
+@order can have the values First, Last and None.
+A trigger may be fired on more than one event as for example CREATE_TABLE and ALTER_TABLE. This is declared in the @stmttype parameter.
 
+To summarize,
+Server level triggers always fire before database level triggers.
+Triggers are fired in the order in which they are created by default.
+If the sp_settriggerorder stored procedure is used then the seqence will be:
+1. the server scope trigger marked First
+2. the server scope triggers marked none 
+3. the server scope trigger marked Last
+4. the database scope trigger marked First
+5. the database triggers marked none
+6. the database trigger marked Last
  
 
 
