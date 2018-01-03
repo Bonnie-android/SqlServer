@@ -63,3 +63,9 @@ BEGIN
 	GetDate()
 	)  
 END
+
+
+LOGON TRIGGERS 
+Logon triggers can be used to track logins, restrict logons to the server, and limit the number of sessions for a specific login.
+Logon triggers fire in response to a LOGON event.
+Logon triggers fire after the authentication phase of logging in finishes and before the user session is established.
