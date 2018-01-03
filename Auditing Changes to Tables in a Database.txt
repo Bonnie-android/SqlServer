@@ -69,3 +69,5 @@ LOGON TRIGGERS
 Logon triggers can be used to track logins, restrict logons to the server, and limit the number of sessions for a specific login.
 Logon triggers fire in response to a LOGON event.
 Logon triggers fire after the authentication phase of logging in finishes and before the user session is established.
+The view sys.dm_exec_sessions contains information about current active login sessions such as session_id, login_time, nt_user_name, status etc.
+This information can be used to track and limit the number of current sessions a user has.
