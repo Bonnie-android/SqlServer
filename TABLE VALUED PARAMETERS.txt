@@ -1,0 +1,59 @@
+TABLE VALUED PARAMETERS
+
+Table valued parameters were introduced in SQL Server 2008.
+A table valued parameter allows a table to be passed as a parameter to a stored procedure from T-SQL or from an application.
+A table valued parameter must be passed as read only to stored procedures, functions, and applications.
+Because of this, DML operations such as INSERT, UPDATE and DELETE can't be performed on a table valued parameter once it is passed into the function.
+There are three steps involved in passing a table valued parameter into an application, stored procedure or function these being:
+1. create the user-defined table type by using the 'create type myTableType' statement
+2. use the user-defined table type as a parameter in the accepting application or stored procedure
+3. declare a table variable, insert the data rows and pass the table variable as a parameter to the stored procedure.
+Example
+I want to write a stored procedure that will insert rows into an empty table every time the stored procedure is called.
+I will be passing the table variable as a parameter to the stored procedure.
+
+1. create the test table to be loaded with a stored procedure
+Create table tbl_EmployeeTest
+(
+  ID int primary key,
+  Name varchar(30),
+  JobTitle varchar(30),
+  DeptID int
+);
+
+2. create the user defined table type
+The definition can be found in the database under 'Programmability'--> 'Types' --> 'User-Defined Table Types'
+Note the use of primary key as in the actual table
+
+Create type EmpTableType as Table
+(
+  ID int primary key,
+  Name varchar(30),
+  JobTitle varchar(30),
+  DeptID int
+);
+
+create procedure sp_InsertIntoEmployeeTest
+@EmpTableType EmpTableType READONLY  ---- table valued parameter must be read only
+AS
+BEGIN
+   Insert into tbl_EmployeeTest
+   Select * from @EmpTableType
+END
+
+Declare @EmployeeTableVariable EmpTableType
+Insert into @EmployeeTableVariable values (1,'Jenny Chang', 'Project Manager',3)
+Insert into @EmployeeTableVariable values (2,'Tammy Smith', 'IT Project Manager',1)
+Insert into @EmployeeTableVariable values (3,'Pavi Rahm', 'Programmer I',2)
+Insert into @EmployeeTableVariable values (4,'Toni Jones', 'Programmer II',3)
+Insert into @EmployeeTableVariable values (5,'Tim Jackson', 'Director',4)
+
+---call stored procedure 
+execute sp_InsertIntoEmployeeTest @EmployeeTableVariable
+
+select * from tbl_EmployeeTest --- will contain the newly inserted rows
+
+
+SENDING A DATATABLE AS A PARAMETER TO A STORED PROCEDURE
+
+
