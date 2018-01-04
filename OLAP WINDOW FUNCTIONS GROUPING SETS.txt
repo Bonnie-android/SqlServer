@@ -133,6 +133,24 @@ Grand Total
 
 
 THE GROUPING FUNCTION IN SQL SERVER
+The Grouping(Column) returns a boolean value of 0 or 1 and indicates whether a column in a GROUP BY list is aggregated or not. 
+Grouping returns 1 if it is aggregated and 0 if it isn't aggregated in the result set.
+
+ select
+ continent,
+ country,
+ city,
+ sum(sales) as totalsales,
+ grouping(continent) as gp_continent,
+ grouping(country) as gp_country,
+ grouping(city) as gp_city
+ from
+ tbl_sales
+ group by rollup(continent,country,city)
+
+If data is aggregated across the grouping column then it will return a 1, if not a 0.
+If we see gp_continent = 0, gp_country = 0 and gp_city = 1 then we are seeing the sum of sales aggregated by city.
+
 
 
 
