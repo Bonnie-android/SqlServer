@@ -156,7 +156,19 @@ GROUPING ID FUNCTION
 What is the GROUPING_ID function?
 Grouping can only be used on one column and will return only a 0 or 1
 Grouping_ID returns the level of grouping on a group of columns
-GROUPING_ID(colA,colB,colC) = Grouping(colA) + Grouping(colB) + Grouping(colC) and can return values 0 to 3 indicating the level of grouping.
+GROUPING_ID(colA,colB,colC) = Grouping(colA) + Grouping(colB) + Grouping(colC) and can return values 0 to 7 indicating the level of grouping.
+Grouping_ID takes into account the hierarchy of grouping where 000 = 0, 001 = 1, 010 = 2, 011=3, 100=4,101=5, 110 = 6 and 111 = 7.
+Grouping_ID concatenates all the Grouping() functions, performs the binary to decimal conversion and returns the equivalent integer.
+In this way GROUPING_ID supplies the level of grouping and allows us to filter on these levels of grouping. 
+
+000 no grouping = 0
+001 grouping on city only = 1
+010 grouping on country only = 2
+011 grouping on country and city only = 3
+100 grouping on continent only = 4
+101 grouping on continent and city = 5
+110 grouping on continent, country only = 6
+111 grouping on continent, country and city = 7
 
 
 
