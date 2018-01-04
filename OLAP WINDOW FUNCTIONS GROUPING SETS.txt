@@ -101,6 +101,40 @@ Note that we will not get sum of salary by job level only, for this we need to u
 
 CUBE
 The Cube() function generates all possible combinations of columns specified in the GROUP BY CUBE() clause.
+select
+department,
+joblevel,
+sum(salary) as total_salary
+from
+employees
+Group By Cube(department,joblevel)
+----
+----Group by department,joblevel with Cube -- same cube function as above
+
+CUBE vs. ROLLUP
+Cube generates a result set that contains aggregates for all cominations of values in the selected columns whereas Rollup generates a result set that shows aggregates for a hierarchy of values in the selected columns.
+The order of columns determines the results when using Rollup.
+
+Cube
+Continent, Country, City 
+Continent, Country
+Continent, City
+Country, City
+Continent
+Country
+City
+Grand Total
+
+Rollup
+Continent, Country, City
+Continent, Country
+Continent
+Grand Total
+
+
+THE GROUPING FUNCTION IN SQL SERVER
+
+
 
 
 
