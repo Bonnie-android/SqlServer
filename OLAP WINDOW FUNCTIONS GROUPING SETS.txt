@@ -65,5 +65,42 @@ GROUPING SETS
    (joblevel), ----- sum of salary by job level
    () -----sum of salary over all
 )
+ORDER BY Grouping(department),Grouping(joblevel),joblevel
+
+
+ROLLUP Function
+ROLLUP is used to do aggregarion operations on multiple levels in a hierarchy. 
+Rollup also provides a grand total.
+
+select
+department,
+joblevel,
+sum(salary) as total_salary
+from
+employees
+GROUP BY ROLLUP(department) ----will provide a sum of salary by department and a grand total
+
+
+
+select
+department,
+joblevel,
+sum(salary) as total_salary
+from
+employees
+GROUP BY department WITH ROLLUP --- same results as above
+
+select
+department,
+joblevel,
+sum(salary) as total_salary
+from
+employees
+GROUP BY ROLLUP(department,joblevel) ---will provide summary of salary by department and job level, by department and a grand total.
+Note that we will not get sum of salary by job level only, for this we need to use the CUBE function.
+
+
+
+
 
 
