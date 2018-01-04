@@ -152,6 +152,14 @@ If data is aggregated across the grouping column then it will return a 1, if not
 If we see gp_continent = 0, gp_country = 0 and gp_city = 1 then we are seeing the sum of sales aggregated by city.
 
 
+GROUPING ID FUNCTION
+What is the GROUPING_ID function?
+Grouping can only be used on one column and will return only a 0 or 1
+Grouping_ID returns the level of grouping on a group of columns
+GROUPING_ID(colA,colB,colC) = Grouping(colA) + Grouping(colB) + Grouping(colC) and can return values 0 to 3 indicating the level of grouping.
+
+
+
 
 
 
