@@ -1,0 +1,69 @@
+WINDOW FUNCTIONS, GROUPING SETS, CUBES, ROLLUPS
+
+
+GROUPING SETS
+
+
+
+---- a group by statement
+select
+department,
+joblevel,
+sum(salary) as total_salary
+from
+employees
+group by department, joblevel;
+
+-------without group by sets we would do the following
+select
+department,
+joblevel,
+sum(salary) as total_salary
+from
+employees
+group by department, joblevel
+UNION ALL  --- stacking two tables
+select
+department,
+null,
+sum(salary) as total_salary
+from
+employees
+group by department
+UNION ALL
+select
+null,
+joblevel,
+sum(salary) as total_salary
+from
+employees
+group by joblevel
+UNION ALL
+select
+null,
+null,
+sum(salary) as total_salary
+from
+employees
+
+IN order to produce the above results the employees table will be read four times which will impact performance.
+It is possible to obtain the same results from one table read which will greatly improve performance.
+These functions are built into SQL Server and are called GROUPING SETS, CUBES and ROLLUPS.
+
+Using GROUPING SETS we would write the statement as:
+select
+department,
+joblevel,
+sum(salary) as total_salary
+from
+employees
+Group BY
+GROUPING SETS
+(
+   (department, joblevel), ----sum of salary by department and job level
+   (department),  ----- sum of salary by department
+   (joblevel), ----- sum of salary by job level
+   () -----sum of salary over all
+)
+
+
