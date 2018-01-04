@@ -167,8 +167,23 @@ In this way GROUPING_ID supplies the level of grouping and allows us to filter o
 011 grouping on country and city only = 3
 100 grouping on continent only = 4
 101 grouping on continent and city = 5
-110 grouping on continent, country only = 6
+110 grouping on continent, country only = 6 
 111 grouping on continent, country and city = 7
+TO Filter on Grouping_ID level we would say 'HAVING GROUPING_ID(Continent,Country,City) = 3' for example.
+
+ select
+ continent,
+ country,
+ city,
+ sum(sales) as totalsales,
+ grouping(continent) as gp_continent,
+ grouping(country) as gp_country,
+ grouping(city) as gp_city,
+ GROUPING_ID(continent,country,city)
+ from
+ tbl_sales
+ group by rollup(continent,country,city)
+ having  GROUPING_ID(continent,country,city) = 3
 
 
 
