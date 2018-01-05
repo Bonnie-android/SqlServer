@@ -230,6 +230,92 @@ PARTITION BY clause is optional
 If PARTITION BY is used then ROW_NUMBER is reset to 1 every time a partition changes
 
 Syntax: ROW_NUMBER() OVER (ORDER BY Col1,Col2)
+The ROW_NUMBER() function does not take any arguements
+
+  Select
+  Name,
+  Title,
+  DeptID,
+  ROW_NUMBER() OVER(ORDER BY DeptID) as ROW_NUM
+  from
+  [dbo].[Employees]
+
+Provides simple ROW_NUM output numbering 1 to #employees in DeptID order. There is no break-processing on DeptID.
+
+To begin ROW_NUMBER at 1 for each category use the PARTITION_BY clause. First PARTITION the data and then ORDER the data.
+  Select
+  Name,
+  Title,
+  DeptID,
+  ROW_NUMBER() OVER(PARTITION BY DeptID ORDER BY DeptID) as ROW_NUM
+  from
+  [dbo].[Employees]
+
+ROW_NUMBER will begin at 1 everytime the DeptID changes.
+
+
+RANK() AND DENSE_RANK() FUNCTIONS
+Returns a rank starting at 1 based on the ordering of rows imposed by the ORDER BY clause
+The ORDER BY clause is required
+The PARTITION_BY clause is optional.
+When the data is partitioned the rank is reset to 1 when the partition changes.
+The RANK function will skip numbers if there is a tie but DENSE_RANK will not.
+In the case where the first records in a table have equal rank, RANK() returns 1,1,3,4,5 but the function DENSE_RANK() will return 1,1,2,3,4.
+
+The basic syntax is
+RANK() OVER (ORDER BY Col1,Col2,...)
+DENSE_RANK() OVER (ORDER BY Col1,Col2,...) --- DOES NOT LEAVE GAPS IN THE RANKINGS
+
+
+Here I want a list of top ranking salaries. The statement may return more than one row:
+  /* USING CTE */
+  WITH [RESULT] AS
+  (Select
+     SALARY,
+     RANK() OVER (ORDER BY SALARY DESC) AS SAL_RANK
+     FROM
+     [ProductDB].[dbo].[Employees]
+	) SELECT 
+   SALARY
+   FROM
+   [RESULT] 
+   WHERE SAL_RANK = 1
+If there are three records with the same ranking as 1 then the next highest RANK will be 4. 
+
+Here I want salaries in top 3 ranking category so I will have to use DENSE_RANK
+ WITH [RESULT] AS
+  (Select
+     SALARY,
+     DENSE_RANK() OVER (ORDER BY SALARY DESC) AS SAL_RANK
+     FROM
+     [ProductDB].[dbo].[Employees]
+	) SELECT 
+   SALARY
+   FROM
+   [RESULT] 
+   WHERE SAL_RANK <= 3
+ 
+Here I want the top ranking salaries by department - so I will partition the data set by department and then take a dense rank.
+First partition the data set, then order within each partition and then take the dense rank
+
+  WITH [RESULT] AS
+  (Select
+     DeptID,
+     SALARY,
+     DENSE_RANK() OVER (PARTITION BY DeptID ORDER BY SALARY DESC) AS SAL_RANK
+     FROM
+     [ProductDB].[dbo].[Employees]
+	) SELECT 
+   DeptID,
+   Salary,
+   Sal_Rank
+   FROM
+   [RESULT] 
+   WHERE SAL_RANK <= 3
+
+
+
+
 
 
 
