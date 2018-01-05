@@ -222,6 +222,18 @@ This will provide detail records of each employee along with the department stat
   MAX(Salary) OVER(Partition by DeptID) as Max_Sal_By_Dept
   from 
   [dbo].[Employees]
+----------------------------------------------------------------------
+The ROW_NUMBER function
+Returns the sequential number of a row starting at 1
+ORDER BY clause is required
+PARTITION BY clause is optional
+If PARTITION BY is used then ROW_NUMBER is reset to 1 every time a partition changes
+
+Syntax: ROW_NUMBER() OVER (ORDER BY Col1,Col2)
+
+
+
+
 
 
 
