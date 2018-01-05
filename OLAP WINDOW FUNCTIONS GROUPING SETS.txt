@@ -185,6 +185,45 @@ TO Filter on Grouping_ID level we would say 'HAVING GROUPING_ID(Continent,Countr
  group by rollup(continent,country,city)
  having  GROUPING_ID(continent,country,city) = 3
 
+------------------------------------------------------------------------
+OVER CLAUSE 
+
+The OVER clause when used with PARTITION BY breaks up the data into partitions or windows. The specified function such as SUM operates on each window of data.
+function() OVER (PARTITION BY Col1, Col2,...) where Col1 and Col2 are the columns that we want to perform the function on.
+What functions are available? COUNT(), AVG(), SUM(), MIN(), MAX(), ROW_NUMBER(), RANK(), DENSE_RANK().
+
+COUNT(DEPARTMENT_ID) OVER (PARTITION BY DEPARTMENT_ID) will partition the data by DEPARTMENT_ID and then take a COUNT() of records in each partition.
+
+
+  /** simple count, sum, min, max and avg of salaries by department **/
+  select
+  count(*) as Employee_Count,
+  sum(salary) as Sum_Salary,
+  min(salary) as Min_Salary,
+  max(salary) as Max_Salary,
+  DeptID
+  from
+  [dbo].[Employees]
+  group by DeptID;
+
+What if you want this attached to each detail record? You want to include each record in the table plus these statistics in a report?
+
+This will provide detail records of each employee along with the department statistics in each record.
+
+ Select
+  ID,
+  Name,
+  Title,
+  Salary,
+  DeptID,
+  COUNT(DeptID) OVER (Partition by DeptID) as Dept_Count,
+  SUM(Salary) OVER (Partition by DeptID) as Tot_Sal_By_Dept,
+  MIN(Salary) OVER(Partition by DeptID) as Min_Sal_By_Dept,
+  MAX(Salary) OVER(Partition by DeptID) as Max_Sal_By_Dept
+  from 
+  [dbo].[Employees]
+
+
 
 
 
