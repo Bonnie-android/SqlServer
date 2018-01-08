@@ -313,6 +313,74 @@ First partition the data set, then order within each partition and then take the
    [RESULT] 
    WHERE SAL_RANK <= 3
 
+GROUPING DATA AND RANKING IT USING NTILE FUNCTION
+
+Order by clause is required.
+Partition By clause is optional.
+NTILE distributes the rows into a specified number of groups
+The groups may not have the same number of members depending on how they are divided up.
+Larger groups come before smaller groups.
+NTILE(2) of 10 rows will divide them equally into two groups with five records in each group.
+NTILE(3) of 10 rows will divide them into three groups with the first group having four records and the rest having three records.
+
+Syntax:
+NTILE(Number_of_Groups) OVER(ORDER BY Col1,Col2,...)
+
+   SELECT 
+   ID,
+   Name,
+   Title,
+   DeptID,
+   Salary,
+   NTILE(3) OVER (ORDER BY Salary) as NTILE
+   FROM
+   [ProductDB].[dbo].[Employees]
+
+Will divide the Salaries into three groups with an NTILE value of 1, 2 or 3.
+1 will be the lower third of salaries, 3 will be the top third of salaries.
+
+I can further divide the data by Department and look at the NTILE of salaries within each department.
+   SELECT 
+   ID,
+   Name,
+   Title,
+   DeptID,
+   Salary,
+   NTILE(3) OVER (PARTITION BY DeptID ORDER BY Salary) as [NTILE]
+   FROM
+   [ProductDB].[dbo].[Employees]
+
+which will divide up the salaries into three groups within each department.
+------------------------------------------------------------
+LEAD AND LAG FUNCTIONS
+
+The LEAD function is used to access subsequent rows along with the current row. 
+The LAG function is used to access previous rows along with the current row.
+ORDER BY clause is required
+PARTITION BY clause is optional
+LEAD(Column_Name,Offset,Default_value) OVER (ORDER BY Col1, Col2, ...)
+LAG(Column_Name,Offset,Default_value) OVER (ORDER BY Col1,Col2,...)
+The Default_Value will use used in place of NULLs. 
+The Offset is 1 by default meaning that the functions will lead or lag by 1 row unless otherwise specified.
+
+   SELECT
+   ID,
+   Name,
+   Title,
+   DeptID,
+   Salary,
+   LEAD(Salary,3,-1) OVER (ORDER BY SALARY) AS LEAD_BY_3,
+   LAG(Salary,3,-1) OVER (ORDER BY SALARY) AS LAG_BY_3
+   FROM
+   [ProductDB].[dbo].[Employees]
+
+This will give me a column for LEAD and LAG.
+They are set to lead or lag by 3 records and will insert -1 if the field is NULL.
+
+
+
+
+
 
 
 
