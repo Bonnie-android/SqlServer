@@ -376,7 +376,115 @@ The Offset is 1 by default meaning that the functions will lead or lag by 1 row 
 
 This will give me a column for LEAD and LAG.
 They are set to lead or lag by 3 records and will insert -1 if the field is NULL.
+ 
+The LEAD and LAG function can also be used using the PARTITION BY option where the operations will only be performed on the partitioned segment of the data.
 
+   SELECT
+   ID,
+   Name,
+   Title,
+   DeptID,
+   Salary,
+   LEAD(Salary,3,-1) OVER (PARTITION BY DEPTID ORDER BY SALARY) AS LEAD_BY_3,
+   LAG(Salary,3,-1)  OVER (PARTITION BY DEPTID ORDER BY SALARY) AS LAG_BY_3
+   FROM
+   [ProductDB].[dbo].[Employees]
+
+FIRST_VALUE FUNCTION
+ORDER BY clause is required.
+PARTITION BY clause is optional.
+Will provide the first record in a set.
+Syntax: FIRST_VALUE(Column_Name) OVER (ORDER BY Col1, Col2, ...)
+
+   SELECT
+   ID,
+   Name,
+   Title,
+   DeptID,
+   Salary,
+   FIRST_VALUE(Name) OVER (ORDER BY Salary) AS First_Value
+   FROM
+   [ProductDB].[dbo].[Employees]
+
+   SELECT
+   ID,
+   Name,
+   Title,
+   DeptID,
+   Salary,
+   FIRST_VALUE(Name) OVER (PARTITION BY DeptID ORDER BY Salary) AS First_Value
+   FROM
+   [ProductDB].[dbo].[Employees]
+
+-------------------------------------------------------------
+Window Functions
+Widow functions come in three categories
+Aggregate functions such as SUM, AVG, COUNT, MIN and MAX.
+Ranking functions such as RANK, DENSE_RANK and ROW_NUMER
+Analytic functions such as LEAD, LAG, FIRST_VALUE and LAST_VALUE
+
+The OVER CLAUSE defines the ordering of rows and the PARTITION BY clause defines the window for the above function to operate on.
+The OVER CLAUSE accepts three arguments to define a window: 
+ORDER BY, which defines the logical order of the rows,PARTITION BY which defines the block of rows for the operation, ROWS or RANGE clause which limites the rows within the partition by specifying the start and end points within the partition.
+
+syntax for ROWS or RANGE
+RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+'Unbounded Preceding' means that the widow starts at the first row of the result set.
+'Unbounded Following' means that the window ends at the last row in the result set
+
+   SELECT
+   ID,
+   Name,
+   Title,
+   DeptID,
+   Salary,
+   AVG(Salary) OVER (ORDER BY Salary ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS Average_Salary,
+   COUNT(Salary) OVER (ORDER BY Salary ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS Count_Salary,
+   SUM(Salary) OVER (ORDER BY Salary ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS Sum_Salary
+   FROM
+   [ProductDB].[dbo].[Employees]
+
+The above statement will provide a single average, single count and single sum for all rows.
+This will be added to each individual employee record.
+However when we add a partition by we will get a single value describing each group in the partition.
+
+ SELECT
+   ID,
+   Name,
+   Title,
+   DeptID,
+   Salary,
+   AVG(Salary) OVER (PARTITION BY DEPTID ORDER BY Salary ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS Average_Salary,
+   COUNT(Salary) OVER (PARTITION BY DEPTID ORDER BY Salary ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS Count_Salary,
+   SUM(Salary) OVER (PARTITION BY DEPTID ORDER BY Salary ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS Sum_Salary
+   FROM
+   [ProductDB].[dbo].[Employees]
+
+The above statement will provide a single average, count and sum of salary for each group in the partition.
+These values will be added to each employee record within the partition.
+
+Moving window
+
+By specifying a preceeding and following value a moving window is created.
+  SELECT
+   ID,
+   Name,
+   Title,
+   DeptID,
+   Salary,
+   AVG(Salary) OVER (PARTITION BY DEPTID ORDER BY Salary ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) AS Average_Salary,
+   COUNT(Salary) OVER (PARTITION BY DEPTID ORDER BY Salary ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) AS Count_Salary,
+   SUM(Salary) OVER (PARTITION BY DEPTID ORDER BY Salary ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) AS Sum_Salary
+   FROM
+   [ProductDB].[dbo].[Employees]
+
+Here the average, count and sum of the current row, previous row and suceeding row is calculated for each employee record.
+This is a moving window which provides a unique value for each record.
+If we use PARTITION BY MONTH we can get a sliding average over last 3 months etc. This is very useful for trending.
+
+
+ROWS vs. RANGE Clause
+Default value for window functions is UNBOUNDED PRECEEDING and CURRENT ROW.
 
 
 
