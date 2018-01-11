@@ -484,7 +484,117 @@ If we use PARTITION BY MONTH we can get a sliding average over last 3 months etc
 
 
 ROWS vs. RANGE Clause
-Default value for window functions is UNBOUNDED PRECEEDING and CURRENT ROW.
+Default value for window functions is RANGE and UNBOUNDED PRECEEDING and CURRENT ROW.
+
+What is the difference between using ROWS and RANGE in these two statements?
+
+  SELECT
+   ID,
+   Name,
+   Title,
+   DeptID,
+   Salary,
+   AVG(Salary) OVER (ORDER BY Salary ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS Average_Salary,
+   COUNT(Salary) OVER (ORDER BY Salary ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS Count_Salary,
+   SUM(Salary) OVER (ORDER BY Salary ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS Sum_Salary
+   FROM
+   [ProductDB].[dbo].[Employees]
+
+ROWS treats each row individually. Even if there are duplicate values each row is taken into account and used in the calculation.
+
+
+  SELECT
+   ID,
+   Name,
+   Title,
+   DeptID,
+   Salary,
+   AVG(Salary) OVER (ORDER BY Salary RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS Average_Salary,
+   COUNT(Salary) OVER (ORDER BY Salary RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS Count_Salary,
+   SUM(Salary) OVER (ORDER BY Salary RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS Sum_Salary
+   FROM
+   [ProductDB].[dbo].[Employees]
+
+RANGE does not process duplicate values as compared to ROWS which does. 
+RANGE treats duplicates as a single entity.
+
+---------------------------------------------------------
+THE PIVOT AND UNPIVOT Functions
+
+Pivot transforms rows into columns and UNPIVOT transforms columns into rows.
+PIVOT
+Pivot takes unique values in a column and transforms this into multiple columns, in other words, it rotates the table and puts the data into cross tabular format.
+Example:
+For the table:
+create table tbl_SalesByCountry
+(
+  SalesAgent varchar(30),
+  Country varchar(20),
+  SalesAmount money
+)
+
+We can get the tablular output using US,UK,China and Japan as sample countries:
+
+select
+SalesAgent,
+US,
+UK,
+China,
+Japan
+from
+tbl_SalesByCountry
+PIVOT (
+   SUM(SalesAmount)
+   FOR Country
+   IN ([US],[UK],[China],[Japan])
+
+) AS Pivot_Table
+
+
+UNPIVOT
+Sample table
+create table tbl_SalesAgentByCountry
+(
+ SalesAgent varchar(30),
+ US money,
+ UK money,
+ Mexico money,
+ Japan money,
+ China money,
+ India money
+)
+
+The following sql code will produce a data set having only three columns,
+SalesAgent, Country and Sales_Amount. US,UK,Mexico,Japan,China and India values appear in the column Countries with their respective sales amounts.
+Each record in the original table will produce six records in the new table.
+
+Note: in the case where there are extraneous fields that will not be included in the final pivot table use the following code to avoid artifacts
+
+Select
+SalesAgent,
+US,
+UK,
+China,
+Japan
+from
+   (Select
+    SalesAgent,
+    Country,
+    SalesAmount
+    from
+    tbl_SalesByCountry)  Source_Table
+  PIVOT
+  (
+     SUM(SalesAmount) 
+     FOR Country 
+     IN ([US],[UK],[China],[Japan])
+  )  Pivot_Table
+
+
+
+
+
+
 
 
 
